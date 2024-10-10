@@ -9,4 +9,7 @@ public class Constants {
     public static final String PHONE_REGEX = "^\\+?\\d{1,13}$";
 
     public static final String NUMBER_PREFIX = "+";
+
+    public static final int MIN_IDENTITY_DOCUMENT_LENGTH = 6;
+    public static final int MAX_IDENTITY_DOCUMENT_LENGTH = 13;
 }

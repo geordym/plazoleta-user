@@ -14,8 +14,7 @@ import static com.plazoleta.user.domain.util.Constants.MINIUM_YEARS_AGE;
 @RequiredArgsConstructor
 public class UserUseCaseValidator {
 
-    public static final int MIN_IDENTITY_DOCUMENT_LENGTH = 6;
-    public static final int MAX_IDENTITY_DOCUMENT_LENGTH = 13;
+
     private final IUserPersistencePort userPersistencePort;
 
     public void validateCreateOwner(User owner){
