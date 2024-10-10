@@ -14,6 +14,8 @@ import static com.plazoleta.user.domain.util.Constants.MINIUM_YEARS_AGE;
 @RequiredArgsConstructor
 public class UserUseCaseValidator {
 
+    public static final int MIN_IDENTITY_DOCUMENT_LENGTH = 6;
+    public static final int MAX_IDENTITY_DOCUMENT_LENGTH = 13;
     private final IUserPersistencePort userPersistencePort;
 
     public void validateCreateOwner(User owner){
@@ -52,12 +54,19 @@ public class UserUseCaseValidator {
         }
     }
 
-    private void validateIdentityDocument(Long identityDocument){
-        boolean isValidIdentityDocument = true; //TODO: Add the bussinness rule to validate identity document
-        if(!isValidIdentityDocument){
+    private void validateIdentityDocument(Long identityDocument) {
+        if (identityDocument == null) {
+            throw new InvalidIdentityDocumentException();
+        }
+
+        String identityDocumentStr = String.valueOf(identityDocument);
+        int length = identityDocumentStr.length();
+
+        if (length < MIN_IDENTITY_DOCUMENT_LENGTH || length > MAX_IDENTITY_DOCUMENT_LENGTH) {
             throw new InvalidIdentityDocumentException();
         }
     }
+
 
     private void validateAge(LocalDate dateOfBirth){
         if (dateOfBirth == null) {
