@@ -6,6 +6,6 @@ import java.time.LocalDateTime;
 
 public class UserEmailAlreadyTaken extends ErrorException{
     public UserEmailAlreadyTaken() {
-        super(ExceptionConstants.EMAIL_ERROR, ExceptionConstants.EMAIL_ALREADY_TAKEN_MESSAGE, LocalDateTime.now().toString());
+        super(ExceptionConstants.USER_EMAIL_ALREADY_TAKEN_ERROR, ExceptionConstants.USER_EMAIL_ALREADY_TAKEN_MESSAGE, LocalDateTime.now().toString());
     }
 }

@@ -4,4 +4,5 @@ import com.plazoleta.user.domain.model.User;
 
 public interface IUserServicePort {
     void createOwner(User owner);
+    User findUserById(Long userId);
 }

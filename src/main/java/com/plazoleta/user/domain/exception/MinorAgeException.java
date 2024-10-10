@@ -7,6 +7,6 @@ import java.time.LocalDateTime;
 public class MinorAgeException extends ErrorException{
 
     public MinorAgeException() {
-        super(ExceptionConstants.EMAIL_ERROR, ExceptionConstants.EMAIL_MESSAGE, LocalDateTime.now().toString());
+        super(ExceptionConstants.MINOR_AGE_ERROR, ExceptionConstants.MINOR_AGE_MESSAGE, LocalDateTime.now().toString());
     }
 }

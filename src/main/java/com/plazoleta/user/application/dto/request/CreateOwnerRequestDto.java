@@ -24,7 +24,6 @@ public class CreateOwnerRequestDto {
     private String lastName;
 
     @NotNull(message = "Identity document cannot be null")
-    @Size(min = MIN_IDENTITY_DOCUMENT_LENGTH, max = MAX_IDENTITY_DOCUMENT_LENGTH)
     private Long identityDocument;
 
     @NotBlank(message = "Phone number cannot be blank")

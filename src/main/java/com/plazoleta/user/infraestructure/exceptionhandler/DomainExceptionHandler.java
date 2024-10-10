@@ -11,6 +11,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class DomainExceptionHandler {
 
+    @ExceptionHandler(UserDoesNotExistException.class)
+    public ResponseEntity<ErrorGenericResponseDto> handleUserDoesNotExistException(UserDoesNotExistException ex){
+        ErrorGenericResponseDto errorGenericResponseDto = new ErrorGenericResponseDto(ex.getError(), ex.getMessage(), ex.getTimestamps());
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(errorGenericResponseDto);
+    }
+
     @ExceptionHandler(InvalidEmailException.class)
     public ResponseEntity<ErrorGenericResponseDto> handleInvalidEmailException(InvalidEmailException ex){
         ErrorGenericResponseDto errorGenericResponseDto = new ErrorGenericResponseDto(ex.getError(), ex.getMessage(), ex.getTimestamps());
