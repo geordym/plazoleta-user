@@ -1,10 +1,9 @@
 package com.plazoleta.user.domain.usecase;
 
 
-import com.plazoleta.user.domain.exception.InvalidEmailException;
-import com.plazoleta.user.domain.exception.InvalidPhoneNumberException;
-import com.plazoleta.user.domain.exception.MinorAgeException;
+import com.plazoleta.user.domain.exception.*;
 import com.plazoleta.user.domain.model.User;
+import com.plazoleta.user.domain.spi.IPasswordEncoderPort;
 import com.plazoleta.user.domain.spi.IUserPersistencePort;
 import com.plazoleta.user.domain.usecase.validation.UserUseCaseValidator;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,13 +20,19 @@ import java.util.stream.Stream;
 import static com.plazoleta.user.domain.util.Constants.MINIUM_YEARS_AGE;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class UserUseCaseTest {
+public class UserEntityUseCaseTest {
 
 
     @Mock
     private IUserPersistencePort userPersistencePort;
+
+
+    @Mock
+    private IPasswordEncoderPort passwordEncoderPort;
+
 
     private UserUseCase userUseCase;
     private UserUseCaseValidator userUseCaseValidator;
@@ -36,8 +41,8 @@ public class UserUseCaseTest {
 
     @BeforeEach
     void setup(){
-        userUseCaseValidator = new UserUseCaseValidator();
-        userUseCase = new UserUseCase(userPersistencePort, userUseCaseValidator);
+        userUseCaseValidator = new UserUseCaseValidator(userPersistencePort);
+        userUseCase = new UserUseCase(userPersistencePort, userUseCaseValidator, passwordEncoderPort);
 
         validUserOwner = new User(0L, "David", "Montero", 1018522721L, "+573026468094", LocalDate.now().minusYears(MINIUM_YEARS_AGE), "ggeordymm@gmail.com", "testing1234");
     }
@@ -101,6 +106,32 @@ public class UserUseCaseTest {
         invalidOwner.setDateOfBirth(dateOfBirth);
 
         assertThrows(MinorAgeException.class, () -> userUseCase.createOwner(invalidOwner));
+    }
+
+
+
+    @Test
+    public void createOwner_WhenCalledWithEmailTaken_ThrowsException(){
+        String takenEmail = "ggeordymm@gmail.com";
+        User invalidOwner = validUserOwner;
+        invalidOwner.setEmail(takenEmail);
+
+        when(userPersistencePort.existsUserByEmail(takenEmail)).thenReturn(true);
+
+
+        assertThrows(UserEmailAlreadyTaken.class, () -> userUseCase.createOwner(invalidOwner));
+    }
+
+    @Test
+    public void createOwner_WhenCalledWithIdentityDocumentTakenThrowsException(){
+        Long takenIdentityDocument = 1018522721L;
+        User invalidOwner = validUserOwner;
+        invalidOwner.setIdentityDocument(takenIdentityDocument);
+
+        when(userPersistencePort.existsUserByIdentityDocument(takenIdentityDocument)).thenReturn(true);
+
+
+        assertThrows(UserIdentityDocumentAlreadyTaken.class, () -> userUseCase.createOwner(invalidOwner));
     }
 
 

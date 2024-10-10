@@ -1,10 +1,9 @@
 package com.plazoleta.user.domain.usecase.validation;
 
-import com.plazoleta.user.domain.exception.InvalidEmailException;
-import com.plazoleta.user.domain.exception.InvalidIdentityDocument;
-import com.plazoleta.user.domain.exception.InvalidPhoneNumberException;
-import com.plazoleta.user.domain.exception.MinorAgeException;
+import com.plazoleta.user.domain.exception.*;
 import com.plazoleta.user.domain.model.User;
+import com.plazoleta.user.domain.spi.IUserPersistencePort;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -12,16 +11,27 @@ import java.time.Period;
 import static com.plazoleta.user.domain.util.Constants.*;
 import static com.plazoleta.user.domain.util.Constants.MINIUM_YEARS_AGE;
 
+@RequiredArgsConstructor
 public class UserUseCaseValidator {
 
+    private final IUserPersistencePort userPersistencePort;
 
     public void validateCreateOwner(User owner){
+        validateUniqueEmail(owner.getEmail());
+        validateUniqueIdentityDocument(owner.getIdentityDocument());
+
         validateEmail(owner.getEmail());
         validatePhoneNumber(owner.getPhoneNumber());
         validateIdentityDocument(owner.getIdentityDocument());
         validateAge(owner.getDateOfBirth());
     }
 
+    private void validateUniqueIdentityDocument(Long identityDocument){
+        boolean alreadyTaken = userPersistencePort.existsUserByIdentityDocument(identityDocument);
+        if(alreadyTaken){
+            throw new UserIdentityDocumentAlreadyTaken();
+        }
+    }
 
     private void validateEmail(String email){
         boolean isValidEmail = email.matches(EMAIL_REGEX);
@@ -45,7 +55,7 @@ public class UserUseCaseValidator {
     private void validateIdentityDocument(Long identityDocument){
         boolean isValidIdentityDocument = true; //TODO: Add the bussinness rule to validate identity document
         if(!isValidIdentityDocument){
-            throw new InvalidIdentityDocument();
+            throw new InvalidIdentityDocumentException();
         }
     }
 
@@ -60,4 +70,12 @@ public class UserUseCaseValidator {
             throw new MinorAgeException();
         }
     }
+
+    public void validateUniqueEmail(String email){
+        boolean existsUserByEmail = userPersistencePort.existsUserByEmail(email);
+        if(existsUserByEmail){
+            throw new UserEmailAlreadyTaken();
+        }
+    }
+
 }

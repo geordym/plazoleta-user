@@ -4,10 +4,10 @@ import com.plazoleta.user.domain.util.ExceptionConstants;
 
 import java.time.LocalDateTime;
 
-public class InvalidIdentityDocument extends ErrorException{
+public class InvalidIdentityDocumentException extends ErrorException{
 
 
-    public InvalidIdentityDocument() {
+    public InvalidIdentityDocumentException() {
         super(ExceptionConstants.EMAIL_ERROR, ExceptionConstants.EMAIL_MESSAGE, LocalDateTime.now().toString());
     }
 }
