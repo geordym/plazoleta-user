@@ -1,4 +1,4 @@
-package com.plazoleta.user.domain.spi;
+package com.plazoleta.user.domain.spi.security;
 
 public interface IPasswordEncoderPort {
     String encode(String rawPassword);

@@ -6,18 +6,19 @@ import com.plazoleta.user.application.handler.impl.UserHandlerImpl;
 import com.plazoleta.user.application.mapper.IUserRequestMapper;
 import com.plazoleta.user.application.mapper.IUserResponseMapper;
 import com.plazoleta.user.domain.api.IUserServicePort;
-import com.plazoleta.user.domain.spi.IPasswordEncoderPort;
+import com.plazoleta.user.domain.spi.security.IPasswordEncoderPort;
 import com.plazoleta.user.domain.spi.IRolePersistencePort;
 import com.plazoleta.user.domain.spi.IUserPersistencePort;
+import com.plazoleta.user.domain.spi.security.ITokenProviderPort;
 import com.plazoleta.user.domain.usecase.UserUseCase;
 import com.plazoleta.user.domain.usecase.validation.UserUseCaseValidator;
 import com.plazoleta.user.infraestructure.out.jpa.adapter.RoleJpaAdapter;
 import com.plazoleta.user.infraestructure.out.jpa.adapter.UserJpaAdapter;
 import com.plazoleta.user.infraestructure.out.jpa.mapper.IRoleEntityMapper;
 import com.plazoleta.user.infraestructure.out.jpa.mapper.IUserEntityMapper;
-import com.plazoleta.user.infraestructure.out.jpa.mapper.IUserEntityMapperImpl;
 import com.plazoleta.user.infraestructure.out.jpa.repository.IRoleRepository;
 import com.plazoleta.user.infraestructure.out.jpa.repository.IUserRepository;
+import com.plazoleta.user.infraestructure.out.security.JwtIOTokenAdapter;
 import com.plazoleta.user.infraestructure.out.security.PasswordEncoderAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -34,6 +35,11 @@ public class BeanConfiguration {
 
     private final IRoleRepository roleRepository;
     private final IRoleEntityMapper roleEntityMapper;
+
+    @Bean
+    public ITokenProviderPort tokenProviderPort(){
+        return new JwtIOTokenAdapter();
+    }
 
 
     @Bean

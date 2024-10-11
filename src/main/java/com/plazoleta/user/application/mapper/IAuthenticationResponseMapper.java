@@ -1,7 +1,8 @@
 package com.plazoleta.user.application.mapper;
 
-import com.plazoleta.user.application.dto.response.RoleResponseDto;
-import com.plazoleta.user.domain.model.Role;
+
+import com.plazoleta.user.application.dto.response.AuthTokenResponseDto;
+import com.plazoleta.user.domain.model.other.AuthToken;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -9,7 +10,7 @@ import org.mapstruct.ReportingPolicy;
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         unmappedSourcePolicy = ReportingPolicy.IGNORE
 )
-public interface IRoleResponseMapper {
+public interface IAuthenticationResponseMapper {
 
-    RoleResponseDto toDto(Role role);
+    AuthTokenResponseDto toDto(AuthToken authToken);
 }

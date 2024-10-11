@@ -1,6 +1,6 @@
 package com.plazoleta.user.infraestructure.out.security;
 
-import com.plazoleta.user.domain.spi.IPasswordEncoderPort;
+import com.plazoleta.user.domain.spi.security.IPasswordEncoderPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 

@@ -3,7 +3,7 @@ package com.plazoleta.user.domain.usecase;
 
 import com.plazoleta.user.domain.exception.*;
 import com.plazoleta.user.domain.model.User;
-import com.plazoleta.user.domain.spi.IPasswordEncoderPort;
+import com.plazoleta.user.domain.spi.security.IPasswordEncoderPort;
 import com.plazoleta.user.domain.spi.IUserPersistencePort;
 import com.plazoleta.user.domain.usecase.validation.UserUseCaseValidator;
 import org.junit.jupiter.api.BeforeEach;

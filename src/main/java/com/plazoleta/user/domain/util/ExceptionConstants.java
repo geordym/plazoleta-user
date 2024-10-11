@@ -28,6 +28,8 @@ public class ExceptionConstants {
     public static final String USER_DOESNOT_EXIST_ERROR = "User not found";
     public static final String USER_DOESNOT_EXIST_MESSAGE = "We cannot found the user do you want to use.";
 
+    public static final String INVALID_USERNAME_PASSWORD_ERROR = "invalid username or password exception";
+    public static final String INVALID_USERNAME_PASSWORD_MESSAGE = "invalid user name or password exception.";
 
 
 }
