@@ -23,7 +23,7 @@ import static com.plazoleta.user.domain.util.JwtSecurityConstants.*;
 public class AuthenticationUseCase implements IAuthenticationServicePort {
 
     private final IPasswordEncoderPort passwordEncoderPort;
-    private final IUserPersistencePort userRepositoryPort;
+    private final IUserPersistencePort userPersistencePort;
     private final ITokenProviderPort tokenProviderPort;
 
 
@@ -37,7 +37,7 @@ public class AuthenticationUseCase implements IAuthenticationServicePort {
             throw new IllegalArgumentException();
         }
 
-        User user = userRepositoryPort.findByEmail(username).orElseThrow(InvalidUsernameOrPasswordException::new);
+        User user = userPersistencePort.findByEmail(username).orElseThrow(InvalidUsernameOrPasswordException::new);
         validatePassword(password, user.getPassword());
         Map<String, Object> claims = createClaims(user);
 
