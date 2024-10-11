@@ -1,6 +1,7 @@
 package com.plazoleta.user.application.mapper;
 
 
+import com.plazoleta.user.application.dto.request.CreateClientRequestDto;
 import com.plazoleta.user.application.dto.request.CreateEmployeeRequestDto;
 import com.plazoleta.user.application.dto.request.CreateOwnerRequestDto;
 import com.plazoleta.user.domain.model.User;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 public interface IUserRequestMapper {
     User toModel(CreateOwnerRequestDto createOwnerRequestDto);
     User toModel(CreateEmployeeRequestDto createEmployeeRequestDto);
+    User toModel(CreateClientRequestDto createClientRequestDto);
 
 
 }

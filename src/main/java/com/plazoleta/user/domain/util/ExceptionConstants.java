@@ -13,6 +13,7 @@ public class ExceptionConstants {
 
 
     public static final String IDENTITY_ERROR = "Identity error document";
+    public static final String IDENTITY_INVALID_MESSAGE = "Identity document does not have the correct length";
     public static final String IDENTITY_ALREADY_TAKEN_MESSAGE = "Identity document already been taken by another user, please use other";
 
 

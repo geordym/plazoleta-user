@@ -28,6 +28,12 @@ public class UserUseCase implements IUserServicePort {
         saveUser(employee, RoleEnum.EMPLOYEE);
     }
 
+    @Override
+    public void createClient(User client) {
+        userUseCaseValidator.validateCreateClient(client);
+        saveUser(client, RoleEnum.CLIENTE);
+    }
+
     private void saveUser(User owner, RoleEnum role) {
         owner.setRole(role.toModel());
         owner.setPassword(passwordEncoderPort.encode(owner.getPassword()));

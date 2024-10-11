@@ -6,8 +6,7 @@ import java.time.LocalDateTime;
 
 public class InvalidIdentityDocumentException extends ErrorException{
 
-
     public InvalidIdentityDocumentException() {
-        super(ExceptionConstants.IDENTITY_ERROR, ExceptionConstants.IDENTITY_ALREADY_TAKEN_MESSAGE, LocalDateTime.now().toString());
+        super(ExceptionConstants.IDENTITY_ERROR, ExceptionConstants.IDENTITY_INVALID_MESSAGE, LocalDateTime.now().toString());
     }
 }

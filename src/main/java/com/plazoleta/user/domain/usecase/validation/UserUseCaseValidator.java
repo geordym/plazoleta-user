@@ -30,10 +30,16 @@ public class UserUseCaseValidator {
     public void validateCreateEmployee(User employee){
         validateUniqueEmail(employee.getEmail());
         validateUniqueIdentityDocument(employee.getIdentityDocument());
-
         validateEmail(employee.getEmail());
         validateIdentityDocument(employee.getIdentityDocument());
 
+    }
+
+    public void validateCreateClient(User client){
+        validateUniqueEmail(client.getEmail());
+        validateUniqueIdentityDocument(client.getIdentityDocument());
+        validateEmail(client.getEmail());
+        validateIdentityDocument(client.getIdentityDocument());
     }
 
     private void validateUniqueIdentityDocument(Long identityDocument){

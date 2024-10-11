@@ -1,5 +1,6 @@
 package com.plazoleta.user.application.handler.impl;
 
+import com.plazoleta.user.application.dto.request.CreateClientRequestDto;
 import com.plazoleta.user.application.dto.request.CreateEmployeeRequestDto;
 import com.plazoleta.user.application.dto.request.CreateOwnerRequestDto;
 import com.plazoleta.user.application.dto.response.UserResponseDto;
@@ -28,6 +29,12 @@ public class UserHandlerImpl implements IUserHandler {
     public void createEmployee(CreateEmployeeRequestDto createEmployeeRequestDto) {
         User user = userRequestMapper.toModel(createEmployeeRequestDto);
         userServicePort.createEmployee(user);
+    }
+
+    @Override
+    public void createClient(CreateClientRequestDto createClientRequestDto) {
+        User user = userRequestMapper.toModel(createClientRequestDto);
+        userServicePort.createClient(user);
     }
 
     @Override

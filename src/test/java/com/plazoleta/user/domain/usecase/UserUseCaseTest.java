@@ -1,7 +1,9 @@
 package com.plazoleta.user.domain.usecase;
 
 
+import com.plazoleta.user.domain.enums.RoleEnum;
 import com.plazoleta.user.domain.exception.*;
+import com.plazoleta.user.domain.model.Role;
 import com.plazoleta.user.domain.model.User;
 import com.plazoleta.user.domain.spi.security.IPasswordEncoderPort;
 import com.plazoleta.user.domain.spi.IUserPersistencePort;
@@ -23,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class UserEntityUseCaseTest {
+class UserUseCaseTest {
 
 
     @Mock
@@ -133,6 +135,27 @@ class UserEntityUseCaseTest {
 
         assertThrows(UserIdentityDocumentAlreadyTaken.class, () -> userUseCase.createOwner(invalidOwner));
     }
+
+
+    @Test
+    public void createClient_WhenCalledWithValidData_DoesNotReturnException(){
+        Role roleClient = new Role(RoleEnum.CLIENTE.getId(), RoleEnum.CLIENTE.getName());
+        validUserOwner.setRole(roleClient);
+        userUseCase.createClient(validUserOwner);
+
+        assertDoesNotThrow(() -> userUseCase.createOwner(validUserOwner));
+    }
+
+    @Test
+    public void createEmployee_WhenCalledWithValidData_DoesNotReturnException(){
+        Role roleEmployee = new Role(RoleEnum.EMPLOYEE.getId(), RoleEnum.EMPLOYEE.getName());
+        validUserOwner.setRole(roleEmployee);
+        userUseCase.createEmployee(validUserOwner);
+
+        assertDoesNotThrow(() -> userUseCase.createEmployee(validUserOwner));
+    }
+
+
 
 
 
