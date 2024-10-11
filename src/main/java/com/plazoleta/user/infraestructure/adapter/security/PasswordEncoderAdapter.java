@@ -1,4 +1,4 @@
-package com.plazoleta.user.infraestructure.out.security;
+package com.plazoleta.user.infraestructure.adapter.security;
 
 import com.plazoleta.user.domain.spi.security.IPasswordEncoderPort;
 import lombok.RequiredArgsConstructor;

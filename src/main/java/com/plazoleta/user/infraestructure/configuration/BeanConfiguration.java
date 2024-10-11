@@ -18,8 +18,8 @@ import com.plazoleta.user.infraestructure.out.jpa.mapper.IRoleEntityMapper;
 import com.plazoleta.user.infraestructure.out.jpa.mapper.IUserEntityMapper;
 import com.plazoleta.user.infraestructure.out.jpa.repository.IRoleRepository;
 import com.plazoleta.user.infraestructure.out.jpa.repository.IUserRepository;
-import com.plazoleta.user.infraestructure.out.security.JwtIOTokenAdapter;
-import com.plazoleta.user.infraestructure.out.security.PasswordEncoderAdapter;
+import com.plazoleta.user.infraestructure.adapter.security.JwtIOTokenAdapter;
+import com.plazoleta.user.infraestructure.adapter.security.PasswordEncoderAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,16 +37,19 @@ public class BeanConfiguration {
     private final IRoleEntityMapper roleEntityMapper;
 
     @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
     public ITokenProviderPort tokenProviderPort(){
         return new JwtIOTokenAdapter();
     }
-
 
     @Bean
     public IUserPersistencePort userPersistencePort(){
         return new UserJpaAdapter(userRepository, userEntityMapper);
     }
-
 
     @Bean
     public UserUseCaseValidator userUseCaseValidator(){
@@ -70,8 +73,7 @@ public class BeanConfiguration {
 
     @Bean
     public IPasswordEncoderPort passwordEncoderPort(){
-        return new PasswordEncoderAdapter(new BCryptPasswordEncoder());
+        return new PasswordEncoderAdapter(bCryptPasswordEncoder());
     }
-
 
 }
