@@ -6,7 +6,7 @@ import com.plazoleta.user.domain.model.User;
 import java.util.Optional;
 
 public interface IUserPersistencePort {
-    User saveOwner(User user);
+    User saveUser(User user);
     boolean existsUserByEmail(String email);
     boolean existsUserByIdentityDocument(Long identityDocument);
 

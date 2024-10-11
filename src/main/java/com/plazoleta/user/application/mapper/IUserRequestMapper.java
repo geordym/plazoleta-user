@@ -1,6 +1,7 @@
 package com.plazoleta.user.application.mapper;
 
 
+import com.plazoleta.user.application.dto.request.CreateEmployeeRequestDto;
 import com.plazoleta.user.application.dto.request.CreateOwnerRequestDto;
 import com.plazoleta.user.domain.model.User;
 import org.mapstruct.Mapper;
@@ -13,8 +14,8 @@ import org.springframework.stereotype.Component;
         unmappedSourcePolicy = ReportingPolicy.IGNORE
 )
 public interface IUserRequestMapper {
-
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "role", ignore = true)
     User toModel(CreateOwnerRequestDto createOwnerRequestDto);
+    User toModel(CreateEmployeeRequestDto createEmployeeRequestDto);
+
+
 }

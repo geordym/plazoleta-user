@@ -1,6 +1,7 @@
 package com.plazoleta.user.infraestructure.input.rest;
 
 
+import com.plazoleta.user.application.dto.request.CreateEmployeeRequestDto;
 import com.plazoleta.user.application.dto.request.CreateOwnerRequestDto;
 import com.plazoleta.user.application.dto.response.UserResponseDto;
 import com.plazoleta.user.application.handler.IUserHandler;
@@ -46,6 +47,18 @@ public class UserController {
     @PostMapping("/owner")
     public ResponseEntity<Void> createOwner(@RequestBody @Valid CreateOwnerRequestDto createOwnerRequestDto) {
         userHandler.createOwner(createOwnerRequestDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Create a new employee")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Employee created", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Bad request, identity or email malformed", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Email or identity document already exists", content = @Content)
+    })
+    @PostMapping("/employee")
+    public ResponseEntity<Void> createEmployee(@RequestBody @Valid CreateEmployeeRequestDto createEmployeeRequestDto) {
+        userHandler.createEmployee(createEmployeeRequestDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

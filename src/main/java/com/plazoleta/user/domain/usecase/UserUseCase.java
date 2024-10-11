@@ -19,15 +19,24 @@ public class UserUseCase implements IUserServicePort {
     @Override
     public void createOwner(User owner) {
         userUseCaseValidator.validateCreateOwner(owner);
-        owner.setRole(RoleEnum.OWNER.toModel());
+        saveUser(owner, RoleEnum.OWNER);
+    }
+
+    @Override
+    public void createEmployee(User employee) {
+        userUseCaseValidator.validateCreateEmployee(employee);
+        saveUser(employee, RoleEnum.EMPLOYEE);
+    }
+
+    private void saveUser(User owner, RoleEnum role) {
+        owner.setRole(role.toModel());
         owner.setPassword(passwordEncoderPort.encode(owner.getPassword()));
-        userPersistencePort.saveOwner(owner);
+        userPersistencePort.saveUser(owner);
     }
 
     @Override
     public User findUserById(Long userId) {
-        User user = userPersistencePort.findUserById(userId).orElseThrow(UserDoesNotExistException::new);
-        return user;
+        return userPersistencePort.findUserById(userId).orElseThrow(UserDoesNotExistException::new);
     }
 
 

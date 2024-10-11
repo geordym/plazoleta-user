@@ -27,6 +27,15 @@ public class UserUseCaseValidator {
         validateAge(owner.getDateOfBirth());
     }
 
+    public void validateCreateEmployee(User employee){
+        validateUniqueEmail(employee.getEmail());
+        validateUniqueIdentityDocument(employee.getIdentityDocument());
+
+        validateEmail(employee.getEmail());
+        validateIdentityDocument(employee.getIdentityDocument());
+
+    }
+
     private void validateUniqueIdentityDocument(Long identityDocument){
         boolean alreadyTaken = userPersistencePort.existsUserByIdentityDocument(identityDocument);
         if(alreadyTaken){

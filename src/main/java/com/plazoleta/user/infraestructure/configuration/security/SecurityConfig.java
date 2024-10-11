@@ -38,6 +38,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(registry -> {
                     registry.requestMatchers("/api/users/owner").hasRole(RoleEnum.ADMINISTRATOR.getName());
+                    registry.requestMatchers("/api/users/employee").hasRole(RoleEnum.OWNER.getName());
                     registry.requestMatchers("/api/users/{id}").permitAll();
 
                     registry.requestMatchers("/api/authenticate").permitAll();
