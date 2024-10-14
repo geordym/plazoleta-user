@@ -4,6 +4,7 @@ package com.plazoleta.user.infraestructure.input.rest;
 import com.plazoleta.user.application.dto.request.CreateClientRequestDto;
 import com.plazoleta.user.application.dto.request.CreateEmployeeRequestDto;
 import com.plazoleta.user.application.dto.request.CreateOwnerRequestDto;
+import com.plazoleta.user.application.dto.response.EmployeeResponseDto;
 import com.plazoleta.user.application.dto.response.UserResponseDto;
 import com.plazoleta.user.application.handler.IUserHandler;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,6 +26,18 @@ import static org.springframework.security.authorization.AuthorityAuthorizationM
 public class UserController {
 
     private final IUserHandler userHandler;
+
+    @Operation(summary = "Find Restaurant who works Employee")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Employee exists and return the employee data", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Employee with the given id cannot be founded", content = @Content),
+    })
+    @GetMapping("/employee/{employeeId}")
+    public ResponseEntity<EmployeeResponseDto> findEmployeeById(@PathVariable("employeeId") Long employeeId) {
+        EmployeeResponseDto employeeResponseDto = userHandler.findEmployeeById(employeeId);
+        return new ResponseEntity<>(employeeResponseDto, HttpStatus.OK);
+    }
+
 
 
     @Operation(summary = "Find user by id")

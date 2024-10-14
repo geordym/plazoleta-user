@@ -5,6 +5,10 @@ import com.plazoleta.user.domain.enums.RoleEnum;
 import com.plazoleta.user.domain.exception.*;
 import com.plazoleta.user.domain.model.Role;
 import com.plazoleta.user.domain.model.User;
+import com.plazoleta.user.domain.model.external.Restaurant;
+import com.plazoleta.user.domain.spi.IEmployeePersistencePort;
+import com.plazoleta.user.domain.spi.IPlazoletaConnectionPort;
+import com.plazoleta.user.domain.spi.IUserAuthenticationPort;
 import com.plazoleta.user.domain.spi.security.IPasswordEncoderPort;
 import com.plazoleta.user.domain.spi.IUserPersistencePort;
 import com.plazoleta.user.domain.usecase.validation.UserUseCaseValidator;
@@ -17,11 +21,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static com.plazoleta.user.domain.util.Constants.MINIUM_YEARS_AGE;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,6 +41,15 @@ class UserUseCaseTest {
     @Mock
     private IPasswordEncoderPort passwordEncoderPort;
 
+    @Mock
+    private IEmployeePersistencePort employeePersistencePort;
+
+    @Mock
+    private IPlazoletaConnectionPort plazoletaConnectionPort;
+
+    @Mock
+    private IUserAuthenticationPort userAuthenticationPort;
+
 
     private UserUseCase userUseCase;
     private UserUseCaseValidator userUseCaseValidator;
@@ -44,7 +59,7 @@ class UserUseCaseTest {
     @BeforeEach
     void setup(){
         userUseCaseValidator = new UserUseCaseValidator(userPersistencePort);
-        userUseCase = new UserUseCase(userPersistencePort, userUseCaseValidator, passwordEncoderPort);
+        userUseCase = new UserUseCase(passwordEncoderPort, plazoletaConnectionPort, employeePersistencePort, userUseCaseValidator, userAuthenticationPort, userPersistencePort );
 
         validUserOwner = new User(0L, "David", "Montero", 1018522721L, "+573026468094", LocalDate.now().minusYears(MINIUM_YEARS_AGE), "ggeordymm@gmail.com", "testing1234");
     }
@@ -149,10 +164,19 @@ class UserUseCaseTest {
     @Test
     public void createEmployee_WhenCalledWithValidData_DoesNotReturnException(){
         Role roleEmployee = new Role(RoleEnum.EMPLOYEE.getId(), RoleEnum.EMPLOYEE.getName());
+        Long restaurantId = 1L;
+        Long ownerId = 1L;
+        Restaurant restaurant = new Restaurant(1L, "Test", 22L, "Address", "+573333333333", "logo.jpg", ownerId);
         validUserOwner.setRole(roleEmployee);
-        userUseCase.createEmployee(validUserOwner);
 
-        assertDoesNotThrow(() -> userUseCase.createEmployee(validUserOwner));
+        when(userAuthenticationPort.getAuthenticatedUserId()).thenReturn(ownerId);
+        when(plazoletaConnectionPort.findRestaurantById(ownerId)).thenReturn(Optional.of(restaurant));
+
+        User userWithId = validUserOwner;
+        userWithId.setId(1L);
+        when(userPersistencePort.saveUser(validUserOwner)).thenReturn(userWithId);
+
+        assertDoesNotThrow(() -> userUseCase.createEmployee(validUserOwner, 1L));
     }
 
 

@@ -1,10 +1,14 @@
 package com.plazoleta.user.infraestructure.out.jpa.adapter;
 
 import com.plazoleta.user.domain.exception.UserDoesNotExistException;
+import com.plazoleta.user.domain.model.Employee;
 import com.plazoleta.user.domain.model.User;
 import com.plazoleta.user.domain.spi.IUserPersistencePort;
+import com.plazoleta.user.infraestructure.out.jpa.entity.EmployeeEntity;
 import com.plazoleta.user.infraestructure.out.jpa.entity.UserEntity;
+import com.plazoleta.user.infraestructure.out.jpa.mapper.IEmployeeEntityMapper;
 import com.plazoleta.user.infraestructure.out.jpa.mapper.IUserEntityMapper;
+import com.plazoleta.user.infraestructure.out.jpa.repository.IEmployeeRepository;
 import com.plazoleta.user.infraestructure.out.jpa.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -12,7 +16,6 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 public class UserJpaAdapter implements IUserPersistencePort {
-
     private final IUserRepository userRepository;
     private final IUserEntityMapper userEntityMapper;
 
@@ -43,6 +46,8 @@ public class UserJpaAdapter implements IUserPersistencePort {
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email).map(userEntityMapper::toModel);
     }
+
+
 
 
 }

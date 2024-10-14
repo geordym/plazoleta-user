@@ -41,6 +41,10 @@ public class SecurityConfig {
                     registry.requestMatchers("/api/users/employee").hasRole(RoleEnum.OWNER.getName());
                     registry.requestMatchers("/api/users/client").permitAll();
                     registry.requestMatchers("/api/users/{id}").permitAll();
+
+                    registry.requestMatchers(HttpMethod.GET, "/api/users/employee/*").permitAll();
+
+
                     registry.requestMatchers("/api/authenticate").permitAll();
                 })
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)

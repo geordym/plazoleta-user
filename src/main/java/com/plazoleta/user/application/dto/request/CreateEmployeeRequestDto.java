@@ -28,4 +28,7 @@ public class CreateEmployeeRequestDto {
     @NotBlank(message = "Password cannot be blank")
     @Size(min = 8, message = "Password must be at least 8 characters long")
     private String password;
+
+    @NotNull
+    private Long restaurantId;
 }

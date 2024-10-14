@@ -11,6 +11,23 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class DomainExceptionHandler {
 
+    @ExceptionHandler(OwnershipViolationException.class)
+    public ResponseEntity<ErrorGenericResponseDto> handleOwnershipViolationException(ExternalConnectionException ex){
+        ErrorGenericResponseDto errorGenericResponseDto = new ErrorGenericResponseDto(ex.getError(), ex.getMessage(), ex.getTimestamps());
+        return ResponseEntity
+                .status(HttpStatus.GATEWAY_TIMEOUT)
+                .body(errorGenericResponseDto);
+    }
+
+
+    @ExceptionHandler(ExternalConnectionException.class)
+    public ResponseEntity<ErrorGenericResponseDto> handleExternalConnectionException(ExternalConnectionException ex){
+        ErrorGenericResponseDto errorGenericResponseDto = new ErrorGenericResponseDto(ex.getError(), ex.getMessage(), ex.getTimestamps());
+        return ResponseEntity
+                .status(HttpStatus.GATEWAY_TIMEOUT)
+                .body(errorGenericResponseDto);
+    }
+
     @ExceptionHandler(InvalidUsernameOrPasswordException.class)
     public ResponseEntity<ErrorGenericResponseDto> handleInvalidUsernameOrPasswordException(InvalidUsernameOrPasswordException ex){
         ErrorGenericResponseDto errorGenericResponseDto = new ErrorGenericResponseDto(ex.getError(), ex.getMessage(), ex.getTimestamps());

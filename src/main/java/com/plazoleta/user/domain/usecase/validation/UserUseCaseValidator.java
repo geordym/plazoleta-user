@@ -13,8 +13,6 @@ import static com.plazoleta.user.domain.util.Constants.MINIUM_YEARS_AGE;
 
 @RequiredArgsConstructor
 public class UserUseCaseValidator {
-
-
     private final IUserPersistencePort userPersistencePort;
 
     public void validateCreateOwner(User owner){

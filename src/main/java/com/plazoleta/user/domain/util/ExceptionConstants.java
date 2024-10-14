@@ -32,5 +32,14 @@ public class ExceptionConstants {
     public static final String INVALID_USERNAME_PASSWORD_ERROR = "invalid username or password exception";
     public static final String INVALID_USERNAME_PASSWORD_MESSAGE = "invalid user name or password exception.";
 
+    public static final String EXTERNAL_CONNECTION_ERROR = "External connection error";
+    public static final String EXTERNAL_CONNECTION_MESSAGE = "We cannot connect with an required external service please try more later.";
+
+
+    public static final String OWNERSHIP_VIOLATION_ERROR = "You cannot do this operation in that restaurant";
+    public static final String OWNERSHIP_VIOLATION_MESSAGE = "Verify if you have access to that restaurant.";
+
+    public static final String EMPLOYEE_DOESNOT_EXIST_ERROR = "The employee cannot be founded";
+    public static final String EMPLOYEE_DOESNOT_EXIST_MESSAGE = "The employee with the given id cannot be founded, please try with another.";
 
 }

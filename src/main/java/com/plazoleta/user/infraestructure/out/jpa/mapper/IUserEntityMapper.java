@@ -1,7 +1,9 @@
 package com.plazoleta.user.infraestructure.out.jpa.mapper;
 
 
+import com.plazoleta.user.domain.model.Employee;
 import com.plazoleta.user.domain.model.User;
+import com.plazoleta.user.infraestructure.out.jpa.entity.EmployeeEntity;
 import com.plazoleta.user.infraestructure.out.jpa.entity.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -27,5 +29,6 @@ public interface IUserEntityMapper {
 
 
     User toModel(UserEntity userEntity);
+
 
 }
