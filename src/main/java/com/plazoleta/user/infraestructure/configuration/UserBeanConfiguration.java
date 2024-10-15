@@ -12,6 +12,7 @@ import com.plazoleta.user.domain.usecase.UserUseCase;
 import com.plazoleta.user.domain.usecase.validation.UserUseCaseValidator;
 import com.plazoleta.user.infraestructure.adapter.auth.UserAuthenticationAdapter;
 import com.plazoleta.user.infraestructure.out.jpa.adapter.UserJpaAdapter;
+import com.plazoleta.user.infraestructure.out.jpa.mapper.IRoleEntityMapper;
 import com.plazoleta.user.infraestructure.out.jpa.mapper.IUserEntityMapper;
 import com.plazoleta.user.infraestructure.out.jpa.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class UserBeanConfiguration {
     private final IEmployeePersistencePort employeePersistencePort;
     private final IPlazoletaConnectionPort plazoletaConnectionPort;
     private final IPasswordEncoderPort passwordEncoderPort;
+    private final IRoleEntityMapper roleEntityMapper;
 
 
     @Bean
@@ -39,7 +41,7 @@ public class UserBeanConfiguration {
 
     @Bean
     public IUserPersistencePort userPersistencePort(){
-        return new UserJpaAdapter(userRepository, userEntityMapper);
+        return new UserJpaAdapter(userRepository, userEntityMapper, roleEntityMapper);
     }
 
     @Bean

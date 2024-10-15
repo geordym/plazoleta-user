@@ -42,4 +42,7 @@ public class ExceptionConstants {
     public static final String EMPLOYEE_DOESNOT_EXIST_ERROR = "The employee cannot be founded";
     public static final String EMPLOYEE_DOESNOT_EXIST_MESSAGE = "The employee with the given id cannot be founded, please try with another.";
 
+    public static final String RESTAURANT_NOT_FOUND_ERROR = "The restaurant cannot be founded";
+    public static final String RESTAURANT_NOT_FOUND_ERROR_MESSAGE = "That restaurant cannot be founded.";
+
 }

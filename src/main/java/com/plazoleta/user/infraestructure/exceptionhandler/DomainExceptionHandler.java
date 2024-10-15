@@ -11,6 +11,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class DomainExceptionHandler {
 
+    @ExceptionHandler(RestaurantNotFoundException.class)
+    public ResponseEntity<ErrorGenericResponseDto> handleRestaurantNotFoundException(RestaurantNotFoundException ex){
+        ErrorGenericResponseDto errorGenericResponseDto = new ErrorGenericResponseDto(ex.getError(), ex.getMessage(), ex.getTimestamps());
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(errorGenericResponseDto);
+    }
+
     @ExceptionHandler(OwnershipViolationException.class)
     public ResponseEntity<ErrorGenericResponseDto> handleOwnershipViolationException(ExternalConnectionException ex){
         ErrorGenericResponseDto errorGenericResponseDto = new ErrorGenericResponseDto(ex.getError(), ex.getMessage(), ex.getTimestamps());

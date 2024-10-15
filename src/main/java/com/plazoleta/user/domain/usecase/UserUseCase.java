@@ -3,6 +3,7 @@ package com.plazoleta.user.domain.usecase;
 import com.plazoleta.user.domain.api.IUserServicePort;
 import com.plazoleta.user.domain.enums.RoleEnum;
 import com.plazoleta.user.domain.exception.OwnershipViolationException;
+import com.plazoleta.user.domain.exception.RestaurantNotFoundException;
 import com.plazoleta.user.domain.exception.UserDoesNotExistException;
 import com.plazoleta.user.domain.model.Employee;
 import com.plazoleta.user.domain.model.User;
@@ -34,11 +35,12 @@ public class UserUseCase implements IUserServicePort {
         saveUser(owner, RoleEnum.OWNER);
     }
 
+
     @Override
     public void createEmployee(User user, Long restaurantId) {
         userUseCaseValidator.validateCreateEmployee(user);
         Long ownerId = userAuthenticationPort.getAuthenticatedUserId();
-        Restaurant restaurant = plazoletaConnectionPort.findRestaurantById(restaurantId).orElseThrow();
+        Restaurant restaurant = plazoletaConnectionPort.findRestaurantById(restaurantId).orElseThrow(RestaurantNotFoundException::new);
         validateRestaurantOwnership(ownerId, restaurant);
 
         User userSaved = saveUser(user, RoleEnum.EMPLOYEE);

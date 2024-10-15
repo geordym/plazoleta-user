@@ -10,7 +10,7 @@ public class JwtSecurityConstants {
     public final static String CLAIM_KEY_USERNAME = "username";
 
 
-    public static final Long ACCESS_TOKEN_DURATION_MINUTES = 900L;
+    public static final Long ACCESS_TOKEN_DURATION_MINUTES = 4000000L;
     public static final Long REFRESH_TOKEN_DURATION_MINUTES = 1400L;
     public static final String KEY_ROLE_CLAIM = "role";
 

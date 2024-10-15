@@ -35,5 +35,6 @@ public class PlazoletaConnectionFeignAdapter implements IPlazoletaConnectionPort
             return Optional.empty();
         } catch (Exception ex) {
             throw new ExternalConnectionException();
-        }    }
+        }
+    }
 }
