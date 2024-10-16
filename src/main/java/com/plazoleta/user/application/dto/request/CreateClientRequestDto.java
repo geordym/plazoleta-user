@@ -24,6 +24,10 @@ public class CreateClientRequestDto {
     @NotNull(message = "Identity document cannot be null")
     private Long identityDocument;
 
+    @NotBlank(message = "Phone number cannot be blank")
+    @Size(min = 8, message = "Phone number must be at least 8 characters long")
+    private String phoneNumber;
+
     @NotBlank(message = "Email cannot be blank")
     @Email(message = "Email should be valid")
     private String email;
