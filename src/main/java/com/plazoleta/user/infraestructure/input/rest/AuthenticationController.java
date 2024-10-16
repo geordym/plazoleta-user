@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.plazoleta.user.infraestructure.input.rest.constants.RestEndpointConstants.ENDPOINT_ROUTE_BASE_AUTHENTICATE;
+
 @RestController
-@RequestMapping("/api/authenticate")
+@RequestMapping(ENDPOINT_ROUTE_BASE_AUTHENTICATE)
 @RequiredArgsConstructor
 public class AuthenticationController {
 
