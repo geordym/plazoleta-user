@@ -9,6 +9,8 @@ import com.plazoleta.user.domain.spi.IUserPersistencePort;
 import com.plazoleta.user.domain.spi.security.IPasswordEncoderPort;
 import com.plazoleta.user.domain.spi.security.ITokenProviderPort;
 import com.plazoleta.user.domain.usecase.validation.UserUseCaseValidator;
+import com.plazoleta.user.util.DataProvider;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,8 +19,10 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.xml.crypto.Data;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -53,7 +57,7 @@ public class AuthenticationUseCaseTest {
 
 
     @Test
-    public void authenticateUser_WhenCalledWithNullData_ReturnException(){
+     void authenticateUser_WhenCalledWithNullData_ReturnException(){
         String username = null;
         String password = null;
 
@@ -61,65 +65,56 @@ public class AuthenticationUseCaseTest {
     }
 
     @Test
-    public void authenticateUser_WhenCalledWithEmailLengthLower_ReturnException(){
-        String username = "a".repeat(SECURITY_EMAIL_MIN_LENGTH - 1 );
-        String password = "".repeat(SECURITY_PASSWORD_MIN_LENGTH);
+     void authenticateUser_WhenCalledWithEmailLengthLower_ReturnException(){
+        String username = DataProvider.getInvalidEmail();
+        String password = DataProvider.getInvalidPassword();
 
         assertThrows(IllegalArgumentException.class, () -> authenticationUseCase.authenticateUser(username, password));
     }
 
     @Test
-    public void authenticateUser_WhenCalledWithPasswordLengthLower_ReturnException(){
-        String username = "a".repeat(SECURITY_EMAIL_MIN_LENGTH);
-        String password = "a".repeat(SECURITY_PASSWORD_MIN_LENGTH - 1);
+     void authenticateUser_WhenCalledWithPasswordLengthLower_ReturnException(){
+        String username = DataProvider.getInvalidEmail();
+        String password = DataProvider.getInvalidPassword();
 
         assertThrows(IllegalArgumentException.class, () -> authenticationUseCase.authenticateUser(username, password));
     }
 
     @Test
-    public void authenticateUser_WhenCalledWithAUserDoesNotExist_ReturnException(){
-        String username = "a".repeat(SECURITY_EMAIL_MIN_LENGTH);
-        String password = "a".repeat(SECURITY_PASSWORD_MIN_LENGTH);
+     void authenticateUser_WhenCalledWithAUserDoesNotExist_ReturnException(){
+        String username = DataProvider.getValidUsername();
+        String password = DataProvider.getValidRandomPassword();
 
         when(userPersistencePort.findByEmail(username)).thenReturn(Optional.empty());
 
         assertThrows(InvalidUsernameOrPasswordException.class, () -> authenticationUseCase.authenticateUser(username, password));
     }
 
-
-
     static Stream<String> invalidPasswords() {
-        return Stream.of(
-                null,
-                "",
-                ""
-        );
+        return DataProvider.invalidPasswords();
     }
-
-
-
 
     @ParameterizedTest
     @MethodSource("invalidPasswords")
-    public void validatePassword_WhenCalledWithStorePasswordNullOrEmpty_ReturnException(String storedPassword){
-        String providedPassword = "a".repeat(SECURITY_PASSWORD_MIN_LENGTH);
+     void validatePassword_WhenCalledWithStorePasswordNullOrEmpty_ReturnException(String storedPassword){
+        String providedPassword = DataProvider.getInvalidPassword();
 
         assertThrows(IllegalArgumentException.class, () -> authenticationUseCase.validatePassword(providedPassword, storedPassword));
     }
 
     @ParameterizedTest
     @MethodSource("invalidPasswords")
-    public void validatePassword_WhenCalledWithProvidedPasswordNullOrEmpty_ReturnException(String providedPassword){
-        String storedPassword = "a".repeat(SECURITY_PASSWORD_MIN_LENGTH);
+     void validatePassword_WhenCalledWithProvidedPasswordNullOrEmpty_ReturnException(String providedPassword){
+        String storedPassword = DataProvider.getValidRandomPassword();
 
         assertThrows(IllegalArgumentException.class, () -> authenticationUseCase.validatePassword(providedPassword, storedPassword));
     }
-
 
     @Test
-    public void validatePassword_WhenCalledAndPasswordNotMatches_ReturnException(){
-        String providedPassword = "testing4411";
-        String storedPassword = "testing44";
+     void validatePassword_WhenCalledAndPasswordNotMatches_ReturnException(){
+        Pair<String, String> passwordsTuple = DataProvider.getPairPasswordNotMatches();
+        String providedPassword = passwordsTuple.getLeft();
+        String storedPassword = passwordsTuple.getRight();
 
         when(passwordEncoderPort.matches(providedPassword,storedPassword)).thenReturn(false);
 
@@ -127,9 +122,10 @@ public class AuthenticationUseCaseTest {
     }
 
     @Test
-    public void validatePassword_WhenCalledAndPasswordMatches_DoesNotReturnException(){
-        String providedPassword = "testing44";
-        String storedPassword = "testing44";
+     void validatePassword_WhenCalledAndPasswordMatches_DoesNotReturnException(){
+        Pair<String, String> passwordsTuple = DataProvider.getPairPasswordMatches();
+        String providedPassword = passwordsTuple.getLeft();
+        String storedPassword = passwordsTuple.getRight();
 
         when(passwordEncoderPort.matches(providedPassword,storedPassword)).thenReturn(true);
 
@@ -137,96 +133,62 @@ public class AuthenticationUseCaseTest {
     }
 
     @Test
-    public void createPassword_WhenCalledWithAnUserNull_ReturnException(){
+     void createPassword_WhenCalledWithAnUserNull_ReturnException(){
         User user = null;
 
         assertThrows(IllegalArgumentException.class, () -> authenticationUseCase.createClaims(user));
     }
 
     @Test
-    public void createClaimsWhenCalledWithValidUser_ReturnClaims(){
-        Long id = 10L;
-        String role = "ROLE";
-        User user = new User();
-        user.setId(id);
-        user.setRole(new Role(0L, role));
-
+     void createClaimsWhenCalledWithValidUser_ReturnClaims(){
+        User user = DataProvider.getUserValid();
         Map<String, Object> claims = authenticationUseCase.createClaims(user);
 
-        assertEquals(claims.get(CLAIM_SUBJECT_KEY), String.valueOf(id));
-        assertEquals(claims.get(KEY_ROLE_CLAIM), role);
+        assertEquals(claims.get(CLAIM_SUBJECT_KEY), String.valueOf(user.getId()));
+        assertEquals(claims.get(KEY_ROLE_CLAIM), user.getRole().getName());
     }
 
 
     @Test
-    public void generateAccessToken_WithValidInputs_ReturnsToken() {
-        // Arrange
-        String subject = "testUser";
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("key", "value");
+     void generateAccessToken_WithValidInputs_ReturnsToken() {
+        String subject = DataProvider.getSubject();
+        Map<String, Object> claims = DataProvider.getSimpleTestClaim();
 
-        LocalDateTime now = LocalDateTime.now();
-
-        // Mock the tokenProviderPort
         when(tokenProviderPort.generateAccessToken(
                 any(LocalDateTime.class),
                 eq(subject),
                 any(LocalDateTime.class),
                 eq(claims)))
                 .thenReturn("mockAccessToken");
-
-        // Act
         String token = authenticationUseCase.generateAccessToken(subject, claims);
 
-        // Assert
         assertEquals("mockAccessToken", token);
     }
 
     @Test
-    public void generateRefreshToken_WithValidInputs_ReturnsToken() {
-        // Arrange
-        String subject = "testUser";
+     void generateRefreshToken_WithValidInputs_ReturnsToken() {
+        String subject = DataProvider.getSubject();
 
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime expirationAt = now.plusMinutes(REFRESH_TOKEN_DURATION_MINUTES);
-
-        // Mock the tokenProviderPort
         when(tokenProviderPort.generateRefreshToken(any(), eq(subject), any()))
                 .thenReturn("mockRefreshToken");
-
-        // Act
         String token = authenticationUseCase.generateRefreshToken(subject);
 
-        // Assert
         assertEquals("mockRefreshToken", token);
     }
 
 
     @Test
-    public void authenticateUser_WithValidInputs_ReturnsAuthToken() {
-        String username = "a".repeat(SECURITY_EMAIL_MIN_LENGTH);
-        String password = "a".repeat(SECURITY_PASSWORD_MIN_LENGTH);
+     void authenticateUser_WithValidInputs_ReturnsAuthToken() {
         String accessToken = "accesstoken";
         String refreshToken = "refreshtoken";
-        String subject = "subject";
-        Long id = 10L;
-        String role = "ROLE";
-        User user = new User();
-        user.setId(id);
-        user.setRole(new Role(0L, role));
-        user.setEmail(username);
-        user.setPassword(password);
+        User user = DataProvider.getUserValid();
 
-        Map<String, Object> claims = new HashMap<>();
-        claims.put(CLAIM_SUBJECT_KEY, user.getId());
-        claims.put(KEY_ROLE_CLAIM, user.getRole().getName());
-
-        when(userPersistencePort.findByEmail(username)).thenReturn(Optional.of(user));
+        when(userPersistencePort.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         when(tokenProviderPort.generateAccessToken(any(), any(), any(), anyMap())).thenReturn(accessToken);
         when(tokenProviderPort.generateRefreshToken(any(), any(), any())).thenReturn(refreshToken);
-        when(passwordEncoderPort.matches(user.getPassword(), password)).thenReturn(true);
+        when(passwordEncoderPort.matches(user.getPassword(), user.getPassword())).thenReturn(true);
 
-        AuthToken authToken = authenticationUseCase.authenticateUser(username, password);
+        AuthToken authToken = authenticationUseCase.authenticateUser(user.getEmail(), user.getPassword());
 
         assertEquals(accessToken,authToken.getAccessToken());
         assertEquals(refreshToken,authToken.getRefreshToken());
